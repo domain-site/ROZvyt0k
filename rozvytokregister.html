@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реєстрація — ROZвиток®</title>
+    <style>
+        :root {
+            --primary-pink: #ff4081;
+            --accent-purple: #7209b7;
+            --bg-pink: #fff0f5;
+            --dark-text: #2d3142;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-pink);
+            color: var(--dark-text);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .card-container {
+            background: white;
+            width: 100%;
+            max-width: 480px;
+            border-radius: 24px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: var(--primary-pink);
+            margin-bottom: 20px;
+        }
+
+        .logo span {
+            color: #ffd166;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary-pink);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 25px;
+            font-size: 0.9rem;
+        }
+
+        .checkbox-group input {
+            margin-top: 3px;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .privacy-link {
+            color: var(--primary-pink);
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary-pink), var(--accent-purple));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            opacity: 0.5;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.2s;
+        }
+
+        .btn-submit.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .btn-submit.active:hover {
+            transform: translateY(-2px);
+        }
+
+        /* Spinner modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 320px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary-pink);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Chat view */
+        .chat-container {
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .chat-header {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent-purple);
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .message-box {
+            background: #f7f7f9;
+            border-radius: 16px;
+            padding: 15px;
+            border-left: 4px solid var(--primary-pink);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .message-box p {
+            margin-bottom: 10px;
+        }
+
+        .pay-btn, .callg-btn {
+            display: inline-block;
+            background: var(--primary-pink);
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .code-badge {
+            background: #eef2ff;
+            color: var(--accent-purple);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+
+        .status-checking {
+            margin-top: 15px;
+            font-size: 0.85rem;
+            color: #666;
+            font-style: italic;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mini-spinner {
+            border: 2px solid #ccc;
+            border-top: 2px solid var(--primary-pink);
+            border-radius: 50%;
+            width: 14px;
+            height: 14px;
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card-container">
+        <div class="logo"><span>ROZ</span>виток<sup>®</sup></div>
+
+        <!-- Форма реєстрації -->
+        <div id="formView">
+            <div class="form-group">
+                <label for="firstName">Ім'я</label>
+                <input type="text" id="firstName" placeholder="Введіть ваше ім'я">
+            </div>
+
+            <div class="form-group">
+                <label for="lastName">Прізвище</label>
+                <input type="text" id="lastName" placeholder="Введіть ваше прізвище">
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="privacyCheck">
+                <label for="privacyCheck">
+                    Я підтримую ліцензійну <span class="privacy-link" id="privacyLink">політику конфіденційності</span>
+                </label>
+            </div>
+
+            <button class="btn-submit" id="submitBtn">Зареєструватися</button>
+        </div>
+
+        <!-- Чат після реєстрації -->
+        <div class="chat-container" id="chatView">
+            <div class="chat-header">💬 Повідомлення від бота ROZвиток</div>
+
+            <div class="message-box">
+                <p><strong>Бот:</strong> Добрий день! Вітаю, що ви зареєструвались на наш курс. Курс буде проходити 06.08.26 о 20:00.</p>
+                <p>Ціна курсу 200 грн. Для оплати перейдіть за цим посиланням:</p>
+                <!-- ВСТАВТЕ ВАШЕ ПОСИЛАННЯ ДЛЯ ОПЛАТИ НИЖЧЕ В href -->
+                <a href="https://send.monobank.ua/jar/7Pjco8X679" target="_blank" class="pay-btn" id="payLinkBtn">Перейти до оплати</a>
+
+                <div class="status-checking" id="payStatus" style="display:none;">
+                    <div class="mini-spinner"></div> Оплата перевіряється...
+                </div>
+            </div>
+
+            <div class="message-box" id="accessBox" style="display:none;">
+                <p>✅ <strong>Оплата перевірена!</strong></p>
+                <p></p> Наш курс буде відбуватись у програмі CallG за цим посиланням:</p>
+                <!-- ВСТАВТЕ ВАШЕ ПОСИЛАННЯ НА CALLG НИЖЧЕ В href -->
+                <a href="https://domain-site.github.io/callg/CallG.html" target="_blank" class="callg-btn">Перейти в CallG</a>
+                <br><br>
+                <p>Код для заходу в посилання:</p>
+                <div class="code-badge" id="accessCode"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модалка завантаження політики -->
+    <div class="modal" id="loadingModal">
+        <div class="modal-content">
+            <div class="spinner"></div>
+            <p>Завантаження політики конфіденційності...</p>
+        </div>
+    </div>
+
+    <script>
+        const privacyCheck = document.getElementById('privacyCheck');
+        const submitBtn = document.getElementById('submitBtn');
+        const privacyLink = document.getElementById('privacyLink');
+        const loadingModal = document.getElementById('loadingModal');
+        const formView = document.getElementById('formView');
+        const chatView = document.getElementById('chatView');
+        const payLinkBtn = document.getElementById('payLinkBtn');
+        const payStatus = document.getElementById('payStatus');
+        const accessBox = document.getElementById('accessBox');
+        const accessCode = document.getElementById('accessCode');
+
+        // Функція генерації коду: 3 літери - 3 літери - 3 літери
+        function generateRandomCode() {
+            const chars = 'abcdefghijklmnopqrstuvwxyz';
+            const getRandomSegment = () => Array.from({length: 3}, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+            return `${getRandomSegment()}-${getRandomSegment()}-${getRandomSegment()}`;
+        }
+
+        // Клік лише по галочці (чекбоксу) -> одразу активує/деактивує кнопку
+        privacyCheck.addEventListener('change', () => {
+            if (privacyCheck.checked) {
+                submitBtn.classList.add('active');
+            } else {
+                submitBtn.classList.remove('active');
+            }
+        });
+
+        // Клік лише по тексту "політику конфіденційності" -> показує кружечок (завантаження)
+        privacyLink.addEventListener('click', (e) => {
+            e.stopPropagation();
+            loadingModal.style.display = 'flex';
+            setTimeout(() => {
+                loadingModal.style.display = 'none';
+            }, 1500);
+        });
+
+        // Натискання кнопки Зареєструватися
+        submitBtn.addEventListener('click', () => {
+            formView.style.display = 'none';
+            chatView.style.display = 'flex';
+            accessCode.textContent = generateRandomCode();
+        });
+
+        // Імітація переходу за посиланням та перевірки оплаты
+        payLinkBtn.addEventListener('click', () => {
+            payStatus.style.display = 'flex';
+            setTimeout(() => {
+                payStatus.style.display = 'none';
+                accessBox.style.display = 'block';
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
